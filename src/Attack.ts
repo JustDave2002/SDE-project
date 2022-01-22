@@ -1,0 +1,7 @@
+class Attack {
+
+    public constructor() {
+
+    }
+
+}
