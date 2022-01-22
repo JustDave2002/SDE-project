@@ -1,0 +1,18 @@
+{
+  "name": "ts-skeleton-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "",
+  "author": "HZ University of Applied Sciences, Dave Elshout, ",
+  "music": "",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc-watch "
+  },
+  "devDependencies": {
+    "typescript": "^4.0",
+    "tsc-watch": "^4.0"
+  }
+}
