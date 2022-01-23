@@ -47,6 +47,7 @@ class GameLogicFacade {
     }
 
     public attack(attack: string){
+        console.clear();
         if (attack == 'primaryAttack'){
             this.context.setAttack(new PrimaryAttack());
         }
