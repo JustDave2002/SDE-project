@@ -15,13 +15,14 @@ class PrimaryAttack {
 }
 class SecondaryAttack {
     executeAttack(hp, attack) {
-        return hp * attack;
+        return hp - attack;
     }
 }
 class Game {
     constructor() {
+        this.context = new Context;
+        this.attack = 'secondaryAttack';
         this.startGame();
-        this.attack = 'primaryAttack';
         this.attackEnemy();
     }
     startGame() {
