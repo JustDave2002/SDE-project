@@ -10,31 +10,31 @@ class Context {
 }
 class PrimaryAttack {
     executeAttack(hp, attack) {
-        return hp * attack;
+        return Math.round(hp / 45 * attack);
     }
 }
 class SecondaryAttack {
     executeAttack(hp, attack) {
-        return hp - attack;
+        return Math.round(hp / 55 * attack);
     }
 }
 class Game {
     constructor() {
         this.context = new Context;
-        this.attack = 'secondaryAttack';
         this.startGame();
-        this.attackEnemy();
+        this.attackEnemy('secondaryAttack');
     }
     startGame() {
     }
-    attackEnemy() {
-        if (this.attack == 'primaryAttack') {
+    attackEnemy(attack) {
+        if (attack == 'primaryAttack') {
             this.context.setAttack(new PrimaryAttack());
         }
-        if (this.attack == 'secondaryAttack') {
+        if (attack == 'secondaryAttack') {
             this.context.setAttack(new SecondaryAttack());
         }
-        console.log(this.context.executeAttack(45, 14));
+        this.damage = this.context.executeAttack(10, 14);
+        console.log('player attacked monster for ' + this.damage);
     }
 }
 class KeyListener {

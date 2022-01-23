@@ -2,6 +2,6 @@
 
 class PrimaryAttack implements AttackStrategy {
     executeAttack(hp: number, attack: number): number {
-        return hp * attack;
+        return Math.round(hp / 45 * attack);
     }
 }

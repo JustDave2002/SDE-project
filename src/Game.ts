@@ -5,32 +5,32 @@
 class Game {
     private enemies: [];
 
-    private attack: string;
+    private damage: number;
 
     private context: Context;
     
     public constructor() {
         this.context = new Context;
 
-        this.attack = 'secondaryAttack'
-
         this.startGame();
 
-        this.attackEnemy();
+        this.attack('secondaryAttack');
     }
 
     public startGame(){
         
     }
 
-    public attackEnemy(){
-        if (this.attack == 'primaryAttack'){
+    public attack(attack: string){
+        if (attack == 'primaryAttack'){
             this.context.setAttack(new PrimaryAttack());
         }
-        if (this.attack == 'secondaryAttack'){
+        if (attack == 'secondaryAttack'){
             this.context.setAttack(new SecondaryAttack());
         }
 
-        console.log(this.context.executeAttack(45, 14));
+        this.damage = this.context.executeAttack(10, 14);
+
+        console.log('player attacked monster for ' + this.damage)
     }
 }
