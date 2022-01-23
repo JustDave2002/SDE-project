@@ -6,6 +6,5 @@ class Swordsman extends Player {
         super();
         this.healthPoints = 13;
         this.damage = 15
-        //attacks
     }
 }
