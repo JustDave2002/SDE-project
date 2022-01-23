@@ -8,6 +8,52 @@ class Context {
         return this.attackStrategy.executeAttack(hp, attack);
     }
 }
+class Enemy {
+    constructor() {
+    }
+    setHp(Hp) {
+        this.healthPoints = Hp;
+    }
+    getHp() {
+        return this.healthPoints;
+    }
+    getDamage() {
+        return this.damage;
+    }
+}
+class Game {
+    constructor() {
+        this.gameLoop = () => {
+            if (this.keyListener.isKeyDown(KeyListener.KEY_1)) {
+                this.pressed1 += 1;
+            }
+            else {
+                this.pressed1 = 0;
+            }
+            if (this.pressed1 == 1) {
+                console.log('attacc');
+                this.facade.attack('primaryAttack');
+                this.facade.enemyAttack();
+            }
+            if (this.keyListener.isKeyDown(KeyListener.KEY_2)) {
+                this.pressed2 += 1;
+            }
+            else {
+                this.pressed2 = 0;
+            }
+            if (this.pressed2 == 1) {
+                console.log("attac 2");
+                this.facade.enemyAttack();
+                this.facade.attack('secondaryAttack');
+            }
+            requestAnimationFrame(this.gameLoop);
+        };
+        this.keyListener = new KeyListener();
+        this.facade = new GameLogicFacade();
+        console.log('start animation');
+        this.gameLoop();
+    }
+}
 class PrimaryAttack {
     executeAttack(hp, attack) {
         return Math.round(hp / 45 * attack);
@@ -18,23 +64,48 @@ class SecondaryAttack {
         return Math.round(hp / 55 * attack);
     }
 }
-class Game {
+class GameLogicFacade {
     constructor() {
         this.context = new Context;
         this.startGame();
-        this.attackEnemy('secondaryAttack');
+        this.possiblePlayers = [new Swordsman(), new Bowman()];
+        this.enemies = [new Zombie(), new Skeleton(), new Spider()];
+        this.spawnPlayer();
+        this.spawnEnemy();
     }
     startGame() {
     }
-    attackEnemy(attack) {
+    spawnPlayer() {
+        this.player = this.possiblePlayers[Math.round(Math.random())];
+        console.log("Your character died. You get a new " + this.player.constructor.name);
+    }
+    spawnEnemy() {
+        this.enemy = this.enemies[Math.floor(Math.random() * 3)];
+        console.log("A new " + this.enemy.constructor.name + " spawned");
+    }
+    attack(attack) {
         if (attack == 'primaryAttack') {
             this.context.setAttack(new PrimaryAttack());
         }
         if (attack == 'secondaryAttack') {
             this.context.setAttack(new SecondaryAttack());
         }
-        this.damage = this.context.executeAttack(10, 14);
-        console.log('player attacked monster for ' + this.damage);
+        else {
+            console.log("error");
+        }
+        const hp = this.player.getHp();
+        const damage = this.player.getDamage();
+        this.damage = this.context.executeAttack(hp, damage);
+        console.log('Player attacked monster for ' + this.damage + 'damage');
+        this.player.setHp(hp - this.damage);
+    }
+    enemyAttack() {
+        const hp = this.enemy.getHp();
+        const damage = this.enemy.getDamage();
+        this.context.setAttack(new EnemyAttack());
+        this.damage = this.context.executeAttack(hp, damage);
+        console.log('Monster attacked player for ' + this.damage + 'damage');
+        this.enemy.setHp(hp - this.damage);
     }
 }
 class KeyListener {
@@ -117,4 +188,57 @@ window.addEventListener('load', () => {
     console.log("Handling the Load event");
     const game = new Game();
 });
+class Player {
+    constructor() {
+    }
+    setHp(Hp) {
+        this.healthPoints = Hp;
+    }
+    getHp() {
+        return this.healthPoints;
+    }
+    getDamage() {
+        return this.damage;
+    }
+}
+class EnemyAttack {
+    executeAttack(hp, attack) {
+        return Math.round(hp / 15 * attack);
+    }
+}
+class Skeleton extends Enemy {
+    constructor() {
+        super();
+        this.healthPoints = 13;
+        this.damage = 15;
+    }
+}
+class Spider extends Enemy {
+    constructor() {
+        super();
+        this.healthPoints = 6;
+        this.damage = 8;
+    }
+}
+class Zombie extends Enemy {
+    constructor() {
+        super();
+        this.healthPoints = 10;
+        this.damage = 5;
+    }
+}
+class Bowman extends Player {
+    constructor() {
+        super();
+        this.healthPoints = 30;
+        this.damage = 15;
+    }
+}
+class Swordsman extends Player {
+    constructor() {
+        super();
+        this.healthPoints = 45;
+        this.damage = 10;
+    }
+}
 //# sourceMappingURL=app.js.map

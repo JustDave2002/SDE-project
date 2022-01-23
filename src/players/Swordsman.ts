@@ -4,7 +4,7 @@ class Swordsman extends Player {
 
     public constructor() {
         super();
-        this.healthPoints = 13;
-        this.damage = 15
+        this.healthPoints = 45;
+        this.damage = 10
     }
 }

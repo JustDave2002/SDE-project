@@ -4,7 +4,7 @@ class Bowman extends Player {
 
     public constructor() {
         super();
-        this.healthPoints = 13;
+        this.healthPoints = 30;
         this.damage = 15
     }
 }

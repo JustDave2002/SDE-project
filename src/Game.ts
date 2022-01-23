@@ -1,36 +1,70 @@
-/// <reference path="Context.ts"/>
-/// <reference path="Attacks/PrimaryAttack.ts"/>
-/// <reference path="Attacks/SecondaryAttack.ts"/>
-
 class Game {
-    private enemies: [];
+    // KeyListener used to make player attack
+    private keyListener: KeyListener;
+    private pressed1: number;
+    private pressed2: number;
+    private facade: GameLogicFacade;
 
-    private damage: number;
+    constructor() {
+        this.keyListener = new KeyListener();
+        this.facade = new GameLogicFacade();
 
-    private context: Context;
-    
-    public constructor() {
-        this.context = new Context;
-
-        this.startGame();
-
-        this.attack('secondaryAttack');
+        // Start the animation
+        console.log('start animation');
+        this.gameLoop();
     }
 
-    public startGame(){
-        
-    }
+    private gameLoop = () => {
 
-    public attack(attack: string){
-        if (attack == 'primaryAttack'){
-            this.context.setAttack(new PrimaryAttack());
-        }
-        if (attack == 'secondaryAttack'){
-            this.context.setAttack(new SecondaryAttack());
+
+        if (this.keyListener.isKeyDown(KeyListener.KEY_1)) {
+            this.pressed1 += 1;
+        } else {
+            this.pressed1 = 0;
         }
 
-        this.damage = this.context.executeAttack(10, 14);
+        if (this.pressed1 == 1) {
+            console.log('attacc');
 
-        console.log('player attacked monster for ' + this.damage)
+        //    this.pause(3000);
+            this.facade.attack('primaryAttack');
+            this.facade.enemyAttack();
+        }
+
+        if (this.keyListener.isKeyDown(KeyListener.KEY_2)) {
+            this.pressed2 += 1;
+        } else {
+            this.pressed2 = 0;
+        }
+
+        if (this.pressed2 == 1) {
+            console.log("attac 2");
+            // this.pause(2000)
+            this.facade.enemyAttack();
+            this.facade.attack('secondaryAttack');
+
+        }
+
+
+
+
+
+        // request another frame
+        requestAnimationFrame(this.gameLoop);
     }
+
+    //  /**
+    //  * pauses the game on button press and start back up 1000 ms after pressing start
+    //  */
+    //   private async pause(ms:number) {
+    //         await this.delay(ms);
+    //     }
+    // /**
+    //  * pauses the game for ms amount of time
+    //  * @param ms amount of time in MS
+    //  */
+    //  public delay(ms: number) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    // }
 }
+
