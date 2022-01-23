@@ -34,6 +34,7 @@ class GameLogicFacade {
             this.start = false;
         } else {
             console.log("Your character died. You get a new " +  this.player.constructor.name);
+            this.player.setHp(this.player.getMaxHp());
             console.log(' ');
         }  
     }
@@ -69,7 +70,7 @@ class GameLogicFacade {
 
         let newEnemyHp = enemyHp - this.damage;
 
-        if(newEnemyHp < 0){
+        if(newEnemyHp <= 0){
             newEnemyHp = 0;
             this.enemyDied = true;
         }
@@ -104,7 +105,7 @@ class GameLogicFacade {
 
         let newPlayerHp = playerHp - this.damage;
 
-        if(newPlayerHp < 0){
+        if(newPlayerHp <= 0){
             newPlayerHp = 0;
             this.playerDied = true;
         }

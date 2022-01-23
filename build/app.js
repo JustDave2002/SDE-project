@@ -85,6 +85,7 @@ class GameLogicFacade {
         }
         else {
             console.log("Your character died. You get a new " + this.player.constructor.name);
+            this.player.setHp(this.player.getMaxHp());
             console.log(' ');
         }
     }
@@ -111,7 +112,7 @@ class GameLogicFacade {
         }
         this.enemy.setHp(enemyHp - this.damage);
         let newEnemyHp = enemyHp - this.damage;
-        if (newEnemyHp < 0) {
+        if (newEnemyHp <= 0) {
             newEnemyHp = 0;
             this.enemyDied = true;
         }
@@ -136,7 +137,7 @@ class GameLogicFacade {
         }
         this.player.setHp(playerHp - this.damage);
         let newPlayerHp = playerHp - this.damage;
-        if (newPlayerHp < 0) {
+        if (newPlayerHp <= 0) {
             newPlayerHp = 0;
             this.playerDied = true;
         }
@@ -280,7 +281,7 @@ class Bowman extends Player {
         super();
         this.maxHp = 30;
         this.healthPoints = 30;
-        this.damage = 1;
+        this.damage = 15;
     }
 }
 class Swordsman extends Player {
