@@ -1,7 +1,13 @@
 # SDE-project
 
+Onze [Repository](https://github.com/JustDave2002/SDE-project).
+
 In dit project hebben Rohan en Dave heel nauw samengewerkt. Wij hebben bepaalde taken verdeeld, en hebben deze gemaakt. Omdat wij de hele tijd in contact waren hebben wij uiteindelijk veel samen geprogrammeerd en hebben wij ons niet altijd aan ons branching gehouden. 
 De samenwerking verliep zonder problemen wegens het goede contact en we werkten heel efficient samen. 
+
+Een aantal van onze commits:
+
+![image](https://i.imgur.com/7ngfetp.png)
 
 <br>
 
@@ -31,6 +37,7 @@ Voor de structural design pattern hebben we gekozen om een facade te maken. Deze
 
 ![image](https://i.imgur.com/23zXeB2.png)
 
+<br>
 
 ## Behavioural design pattern
 Voor de behavioural design pattern hebben we gekozen om een Strategy design pattern te maken. In het specifiek hebben we de attack functionaliteit opgesplitst in meerdere strategies. Zo hebben we een enemyAttack, een primaryAttack en een secondaryAttack. Deze attacks hebben allemaal verschillende berekenigen voor de damage die de attack dealt.
