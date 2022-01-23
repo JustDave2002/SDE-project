@@ -34,6 +34,7 @@ class GameLogicFacade {
             this.start = false;
         } else {
             console.log("Your character died. You get a new " +  this.player.constructor.name);
+            this.player.setHp(this.player.getMaxHp());
             console.log(' ');
         }  
     }
