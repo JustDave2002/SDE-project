@@ -111,7 +111,7 @@ class GameLogicFacade {
         }
         this.enemy.setHp(enemyHp - this.damage);
         let newEnemyHp = enemyHp - this.damage;
-        if (newEnemyHp < 0) {
+        if (newEnemyHp <= 0) {
             newEnemyHp = 0;
             this.enemyDied = true;
         }
@@ -136,7 +136,7 @@ class GameLogicFacade {
         }
         this.player.setHp(playerHp - this.damage);
         let newPlayerHp = playerHp - this.damage;
-        if (newPlayerHp < 0) {
+        if (newPlayerHp <= 0) {
             newPlayerHp = 0;
             this.playerDied = true;
         }
