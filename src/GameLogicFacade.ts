@@ -42,7 +42,7 @@ class GameLogicFacade {
     public spawnEnemy(){
         this.enemy = this.enemies[Math.floor(Math.random() * 3)]
         this.enemy.setHp(this.enemy.getMaxHp());
-        console.log("A new"+ `%c ${this.enemy.constructor.name}`, 'color:red;'+ "spawned" );
+        console.log("A new"+ `%c ${this.enemy.constructor.name}`, 'color:red;', "spawned" );
         console.log(' ');
     }
 
@@ -79,7 +79,7 @@ class GameLogicFacade {
         console.log(' ');
 
         if(this.enemyDied == true){
-            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;' + 'died')
+            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;', 'died')
             console.log(' ');
             this.enemyDied = false;
             this.spawnEnemy();

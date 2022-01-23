@@ -92,7 +92,7 @@ class GameLogicFacade {
     spawnEnemy() {
         this.enemy = this.enemies[Math.floor(Math.random() * 3)];
         this.enemy.setHp(this.enemy.getMaxHp());
-        console.log("A new" + `%c ${this.enemy.constructor.name}`, 'color:red;' + "spawned");
+        console.log("A new" + `%c ${this.enemy.constructor.name}`, 'color:red;', "spawned");
         console.log(' ');
     }
     attack(attack) {
@@ -119,7 +119,7 @@ class GameLogicFacade {
         console.log(`%c ${this.player.constructor.name}` + '%c attacked' + `%c ${this.enemy.constructor.name}` + '%c for' + `%c ${this.damage}` + ' %cdamage (' + enemyHp + '❤️ - ' + this.damage + '⚔️ = ' + newEnemyHp + '❤️)', 'color:green;', 'color:white;', 'color:red;', 'color:white', 'color:green', 'color:white');
         console.log(' ');
         if (this.enemyDied == true) {
-            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;' + 'died');
+            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;', 'died');
             console.log(' ');
             this.enemyDied = false;
             this.spawnEnemy();
