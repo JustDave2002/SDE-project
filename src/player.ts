@@ -1,11 +1,15 @@
 abstract class Player {
 
+    protected maxHp: number;
     protected healthPoints: number;
     protected damage: number;
      constructor() {
          
      }
  
+     public getMaxHp() : number {
+         return this.maxHp
+     }
      
      public setHp(Hp : number) {
          this.healthPoints = Hp;
@@ -20,6 +24,4 @@ abstract class Player {
      public getDamage() : number {
          return this.damage
      }
-     
-     
  }

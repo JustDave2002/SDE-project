@@ -1,7 +1,8 @@
 /// <reference path="../AttackStrategy.ts"/>
 
 class SecondaryAttack implements AttackStrategy {
-    executeAttack(hp: number, attack: number): number {
-        return Math.round(hp / 55 * attack);
+    executeAttack(maxHp: number, hp: number, attack: number): number {
+        maxHp += 10
+        return Math.round(hp / maxHp * attack);
     }
 }

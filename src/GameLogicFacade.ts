@@ -8,33 +8,41 @@ class GameLogicFacade {
     private possiblePlayers: Player[];
     private player: Player;
     private damage: number;
+    private start: boolean;
+    private playerDied: boolean;
+    private enemyDied: boolean;
 
     private context: Context;
     
     public constructor() {
         this.context = new Context;
 
-        this.startGame();
-
-        // this.attack('secondaryAttack');
-
         this.possiblePlayers = [new Swordsman(), new Bowman()]
         this.enemies = [new Zombie(), new Skeleton(), new Spider()]
+        this.playerDied = false;
+        this.enemyDied = false;
+        this.start = true;
         this.spawnPlayer();
         this.spawnEnemy();
     }
 
-    public startGame(){
-        
-    }
     public spawnPlayer(){
         this.player = this.possiblePlayers[Math.round(Math.random())]
-        console.log("Your character died. You get a new " +  this.player.constructor.name);
+        if(this.start === true){
+            console.log("Welcome soldier. You get a new " +  this.player.constructor.name);
+            console.log(' ');
+            this.start = false;
+        } else {
+            console.log("Your character died. You get a new " +  this.player.constructor.name);
+            console.log(' ');
+        }  
     }
 
     public spawnEnemy(){
         this.enemy = this.enemies[Math.floor(Math.random() * 3)]
+        this.enemy.setHp(this.enemy.getMaxHp());
         console.log("A new " + this.enemy.constructor.name + " spawned");
+        console.log(' ');
     }
 
     public attack(attack: string){
@@ -45,24 +53,70 @@ class GameLogicFacade {
             this.context.setAttack(new SecondaryAttack());
         } 
 
-        const hp = this.player.getHp()
+        const maxHp = this.player.getMaxHp()
+        const currentHp = this.player.getHp()
         const damage = this.player.getDamage()
 
-        this.damage = this.context.executeAttack(hp, damage);
+        this.damage = this.context.executeAttack(maxHp, currentHp, damage);
 
-        console.log('Player attacked monster for ' + this.damage + 'damage')
-        this.player.setHp(hp - this.damage)
+        const enemyHp = this.enemy.getHp();
+
+        if(this.damage < 0){
+            this.damage = 0;
+        }
+
+        this.enemy.setHp(enemyHp - this.damage)
+
+        let newEnemyHp = enemyHp - this.damage;
+
+        if(newEnemyHp < 0){
+            newEnemyHp = 0;
+            this.enemyDied = true;
+        }
+
+        console.log(this.player.constructor.name + ' attacked ' + this.enemy.constructor.name +  ' for ' + this.damage + ' damage (' + enemyHp + '❤️ - ' + this.damage + '⚔️ = ' + newEnemyHp + '❤️)')
+        console.log(' ');
+
+        if(this.enemyDied == true){
+            console.log(this.enemy.constructor.name + ' died')
+            console.log(' ');
+            this.enemyDied = false;
+            this.spawnEnemy();
+        }
     }
 
     public enemyAttack(){
+        const maxHp = this.enemy.getMaxHp()
         const hp = this.enemy.getHp()
         const damage = this.enemy.getDamage()
         
         this.context.setAttack(new EnemyAttack());
 
-        this.damage = this.context.executeAttack(hp, damage);
+        this.damage = this.context.executeAttack(maxHp, hp, damage);
 
-        console.log('Monster attacked player for ' + this.damage + 'damage')
-        this.enemy.setHp(hp - this.damage)
+        const playerHp = this.player.getHp();
+
+        if(this.damage < 0){
+            this.damage = 0;
+        }
+
+        this.player.setHp(playerHp - this.damage)
+
+        let newPlayerHp = playerHp - this.damage;
+
+        if(newPlayerHp < 0){
+            newPlayerHp = 0;
+            this.playerDied = true;
+        }
+
+        console.log(this.enemy.constructor.name + ' attacked ' + this.player.constructor.name + ' for ' + this.damage + ' damage (' + playerHp + '❤️ - ' + this.damage + '⚔️ = ' + newPlayerHp + '❤️)')
+        console.log(' ');
+
+        if(this.playerDied == true){
+            console.log(this.player.constructor.name + ' died')
+            console.log(' ');
+            this.playerDied = false;
+            this.spawnPlayer();
+        }
     }
 }

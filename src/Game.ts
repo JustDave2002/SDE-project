@@ -10,7 +10,6 @@ class Game {
         this.facade = new GameLogicFacade();
 
         // Start the animation
-        console.log('start animation');
         this.gameLoop();
     }
 
@@ -24,7 +23,6 @@ class Game {
         }
 
         if (this.pressed1 == 1) {
-            console.log('attacc');
 
         //    this.pause(3000);
             this.facade.attack('primaryAttack');
@@ -38,7 +36,6 @@ class Game {
         }
 
         if (this.pressed2 == 1) {
-            console.log("attac 2");
             // this.pause(2000)
             this.facade.enemyAttack();
             this.facade.attack('secondaryAttack');

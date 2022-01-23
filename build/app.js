@@ -4,12 +4,15 @@ class Context {
     setAttack(attackStrategy) {
         this.attackStrategy = attackStrategy;
     }
-    executeAttack(hp, attack) {
-        return this.attackStrategy.executeAttack(hp, attack);
+    executeAttack(maxHp, hp, attack) {
+        return this.attackStrategy.executeAttack(maxHp, hp, attack);
     }
 }
 class Enemy {
     constructor() {
+    }
+    getMaxHp() {
+        return this.maxHp;
     }
     setHp(Hp) {
         this.healthPoints = Hp;
@@ -31,7 +34,6 @@ class Game {
                 this.pressed1 = 0;
             }
             if (this.pressed1 == 1) {
-                console.log('attacc');
                 this.facade.attack('primaryAttack');
                 this.facade.enemyAttack();
             }
@@ -42,7 +44,6 @@ class Game {
                 this.pressed2 = 0;
             }
             if (this.pressed2 == 1) {
-                console.log("attac 2");
                 this.facade.enemyAttack();
                 this.facade.attack('secondaryAttack');
             }
@@ -50,38 +51,48 @@ class Game {
         };
         this.keyListener = new KeyListener();
         this.facade = new GameLogicFacade();
-        console.log('start animation');
         this.gameLoop();
     }
 }
 class PrimaryAttack {
-    executeAttack(hp, attack) {
-        return Math.round(hp / 45 * attack);
+    executeAttack(maxHp, hp, attack) {
+        return Math.round(hp / maxHp * attack);
     }
 }
 class SecondaryAttack {
-    executeAttack(hp, attack) {
-        return Math.round(hp / 55 * attack);
+    executeAttack(maxHp, hp, attack) {
+        maxHp += 10;
+        return Math.round(hp / maxHp * attack);
     }
 }
 class GameLogicFacade {
     constructor() {
         this.context = new Context;
-        this.startGame();
         this.possiblePlayers = [new Swordsman(), new Bowman()];
         this.enemies = [new Zombie(), new Skeleton(), new Spider()];
+        this.playerDied = false;
+        this.enemyDied = false;
+        this.start = true;
         this.spawnPlayer();
         this.spawnEnemy();
     }
-    startGame() {
-    }
     spawnPlayer() {
         this.player = this.possiblePlayers[Math.round(Math.random())];
-        console.log("Your character died. You get a new " + this.player.constructor.name);
+        if (this.start === true) {
+            console.log("Welcome soldier. You get a new " + this.player.constructor.name);
+            console.log(' ');
+            this.start = false;
+        }
+        else {
+            console.log("Your character died. You get a new " + this.player.constructor.name);
+            console.log(' ');
+        }
     }
     spawnEnemy() {
         this.enemy = this.enemies[Math.floor(Math.random() * 3)];
+        this.enemy.setHp(this.enemy.getMaxHp());
         console.log("A new " + this.enemy.constructor.name + " spawned");
+        console.log(' ');
     }
     attack(attack) {
         if (attack == 'primaryAttack') {
@@ -90,22 +101,53 @@ class GameLogicFacade {
         if (attack == 'secondaryAttack') {
             this.context.setAttack(new SecondaryAttack());
         }
-        else {
-            console.log("error");
-        }
-        const hp = this.player.getHp();
+        const maxHp = this.player.getMaxHp();
+        const currentHp = this.player.getHp();
         const damage = this.player.getDamage();
-        this.damage = this.context.executeAttack(hp, damage);
-        console.log('Player attacked monster for ' + this.damage + 'damage');
-        this.player.setHp(hp - this.damage);
+        this.damage = this.context.executeAttack(maxHp, currentHp, damage);
+        const enemyHp = this.enemy.getHp();
+        if (this.damage < 0) {
+            this.damage = 0;
+        }
+        this.enemy.setHp(enemyHp - this.damage);
+        let newEnemyHp = enemyHp - this.damage;
+        if (newEnemyHp < 0) {
+            newEnemyHp = 0;
+            this.enemyDied = true;
+        }
+        console.log(this.player.constructor.name + ' attacked ' + this.enemy.constructor.name + ' for ' + this.damage + ' damage (' + enemyHp + '❤️ - ' + this.damage + '⚔️ = ' + newEnemyHp + '❤️)');
+        console.log(' ');
+        if (this.enemyDied == true) {
+            console.log(this.enemy.constructor.name + ' died');
+            console.log(' ');
+            this.enemyDied = false;
+            this.spawnEnemy();
+        }
     }
     enemyAttack() {
+        const maxHp = this.enemy.getMaxHp();
         const hp = this.enemy.getHp();
         const damage = this.enemy.getDamage();
         this.context.setAttack(new EnemyAttack());
-        this.damage = this.context.executeAttack(hp, damage);
-        console.log('Monster attacked player for ' + this.damage + 'damage');
-        this.enemy.setHp(hp - this.damage);
+        this.damage = this.context.executeAttack(maxHp, hp, damage);
+        const playerHp = this.player.getHp();
+        if (this.damage < 0) {
+            this.damage = 0;
+        }
+        this.player.setHp(playerHp - this.damage);
+        let newPlayerHp = playerHp - this.damage;
+        if (newPlayerHp < 0) {
+            newPlayerHp = 0;
+            this.playerDied = true;
+        }
+        console.log(this.enemy.constructor.name + ' attacked ' + this.player.constructor.name + ' for ' + this.damage + ' damage (' + playerHp + '❤️ - ' + this.damage + '⚔️ = ' + newPlayerHp + '❤️)');
+        console.log(' ');
+        if (this.playerDied == true) {
+            console.log(this.player.constructor.name + ' died');
+            console.log(' ');
+            this.playerDied = false;
+            this.spawnPlayer();
+        }
     }
 }
 class KeyListener {
@@ -191,6 +233,9 @@ window.addEventListener('load', () => {
 class Player {
     constructor() {
     }
+    getMaxHp() {
+        return this.maxHp;
+    }
     setHp(Hp) {
         this.healthPoints = Hp;
     }
@@ -202,13 +247,14 @@ class Player {
     }
 }
 class EnemyAttack {
-    executeAttack(hp, attack) {
-        return Math.round(hp / 15 * attack);
+    executeAttack(maxHp, hp, attack) {
+        return Math.round(hp / maxHp * attack);
     }
 }
 class Skeleton extends Enemy {
     constructor() {
         super();
+        this.maxHp = 13;
         this.healthPoints = 13;
         this.damage = 15;
     }
@@ -216,6 +262,7 @@ class Skeleton extends Enemy {
 class Spider extends Enemy {
     constructor() {
         super();
+        this.maxHp = 6;
         this.healthPoints = 6;
         this.damage = 8;
     }
@@ -223,6 +270,7 @@ class Spider extends Enemy {
 class Zombie extends Enemy {
     constructor() {
         super();
+        this.maxHp = 10;
         this.healthPoints = 10;
         this.damage = 5;
     }
@@ -230,13 +278,15 @@ class Zombie extends Enemy {
 class Bowman extends Player {
     constructor() {
         super();
+        this.maxHp = 30;
         this.healthPoints = 30;
-        this.damage = 15;
+        this.damage = 1;
     }
 }
 class Swordsman extends Player {
     constructor() {
         super();
+        this.maxHp = 45;
         this.healthPoints = 45;
         this.damage = 10;
     }

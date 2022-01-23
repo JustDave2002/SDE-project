@@ -1,3 +1,3 @@
 interface AttackStrategy {
-    executeAttack(hp: number, attack: number): number;
+    executeAttack(maxHp: number, hp: number, attack: number): number;
 }

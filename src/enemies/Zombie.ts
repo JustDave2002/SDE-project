@@ -4,7 +4,8 @@ class Zombie extends Enemy {
 
     public constructor() {
         super();
+        this.maxHp = 10;
         this.healthPoints = 10;
-        this.damage = 5
+        this.damage = 5;
     }
 }

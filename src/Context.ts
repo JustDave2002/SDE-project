@@ -11,7 +11,7 @@ class Context {
         this.attackStrategy = attackStrategy;
     }
 
-    public executeAttack(hp: number, attack: number){
-        return this.attackStrategy.executeAttack(hp, attack);
+    public executeAttack(maxHp: number, hp: number, attack: number){
+        return this.attackStrategy.executeAttack(maxHp, hp, attack);
     }
 }
