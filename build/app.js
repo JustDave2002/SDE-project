@@ -280,7 +280,7 @@ class Bowman extends Player {
         super();
         this.maxHp = 30;
         this.healthPoints = 30;
-        this.damage = 1;
+        this.damage = 15;
     }
 }
 class Swordsman extends Player {
