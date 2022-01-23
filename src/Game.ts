@@ -9,6 +9,9 @@ class Game {
         this.keyListener = new KeyListener();
         this.facade = new GameLogicFacade();
 
+        this.facade.spawnPlayer();
+        this.facade.spawnEnemy();
+
         // Start the animation
         this.gameLoop();
     }
@@ -25,8 +28,23 @@ class Game {
         if (this.pressed1 == 1) {
 
         //    this.pause(3000);
-            this.facade.attack('primaryAttack');
-            this.facade.enemyAttack();
+        let enemyDied = this.facade.attack('primaryAttack');
+
+        if(enemyDied == true){
+            console.log(`%c ${this.facade.enemy.constructor.name}`, 'color:red;', 'died')
+            console.log(' ');
+            enemyDied = false;
+            this.facade.spawnEnemy();
+        }
+
+            let playerDied = this.facade.enemyAttack();
+
+            if(playerDied == true){
+                console.log(this.facade.player.constructor.name + ' died')
+                console.log(' ');
+                playerDied = false;
+                this.facade.spawnPlayer();
+            }
         }
 
         if (this.keyListener.isKeyDown(KeyListener.KEY_2)) {
@@ -37,14 +55,24 @@ class Game {
 
         if (this.pressed2 == 1) {
             // this.pause(2000)
-            this.facade.enemyAttack();
-            this.facade.attack('secondaryAttack');
+            let playerDied = this.facade.enemyAttack();
 
+            if(playerDied == true){
+                console.log(this.facade.player.constructor.name + ' died')
+                console.log(' ');
+                playerDied = false;
+                this.facade.spawnPlayer();
+            }
+
+            let enemyDied = this.facade.attack('secondaryAttack');
+
+            if(enemyDied == true){
+                console.log(`%c ${this.facade.enemy.constructor.name}`, 'color:red;', 'died')
+                console.log(' ');
+                enemyDied = false;
+                this.facade.spawnEnemy();
+            }
         }
-
-
-
-
 
         // request another frame
         requestAnimationFrame(this.gameLoop);

@@ -4,9 +4,9 @@
 
 class GameLogicFacade {
     private enemies: Enemy[];
-    private enemy: Enemy;
+    public enemy: Enemy;
     private possiblePlayers: Player[];
-    private player: Player;
+    public player: Player;
     private damage: number;
     private start: boolean;
     private playerDied: boolean;
@@ -22,8 +22,6 @@ class GameLogicFacade {
         this.playerDied = false;
         this.enemyDied = false;
         this.start = true;
-        this.spawnPlayer();
-        this.spawnEnemy();
     }
 
     public spawnPlayer(){
@@ -71,6 +69,8 @@ class GameLogicFacade {
 
         let newEnemyHp = enemyHp - this.damage;
 
+        this.enemyDied = false;
+        
         if(newEnemyHp <= 0){
             newEnemyHp = 0;
             this.enemyDied = true;
@@ -79,12 +79,7 @@ class GameLogicFacade {
         console.log(`%c ${this.player.constructor.name}` + '%c attacked'+ `%c ${this.enemy.constructor.name}`+ '%c for' + `%c ${this.damage}` + ' %cdamage (' + enemyHp + '❤️ - ' + this.damage + '⚔️ = ' + newEnemyHp + '❤️)', 'color:green;', 'color:white;', 'color:red;','color:white','color:green', 'color:white')
         console.log(' ');
 
-        if(this.enemyDied == true){
-            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;', 'died')
-            console.log(' ');
-            this.enemyDied = false;
-            this.spawnEnemy();
-        }
+        return this.enemyDied
     }
 
     public enemyAttack(){
@@ -106,6 +101,8 @@ class GameLogicFacade {
 
         let newPlayerHp = playerHp - this.damage;
 
+        this.playerDied = false;
+        
         if(newPlayerHp <= 0){
             newPlayerHp = 0;
             this.playerDied = true;
@@ -114,11 +111,6 @@ class GameLogicFacade {
         console.log(`%c ${this.enemy.constructor.name}`+ '%c attacked'+ `%c ${this.player.constructor.name}`+ '%c for' + `%c ${this.damage}` + '%c damage (' + playerHp + '❤️ - ' + this.damage + '⚔️ = ' + newPlayerHp + '❤️)', 'color:red;', 'color:white;', 'color:green;','color:white','color:red', 'color:white')
         console.log(' ');
 
-        if(this.playerDied == true){
-            console.log(this.player.constructor.name + ' died')
-            console.log(' ');
-            this.playerDied = false;
-            this.spawnPlayer();
-        }
+        return this.playerDied
     }
 }

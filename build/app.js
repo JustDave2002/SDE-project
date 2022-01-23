@@ -34,8 +34,20 @@ class Game {
                 this.pressed1 = 0;
             }
             if (this.pressed1 == 1) {
-                this.facade.attack('primaryAttack');
-                this.facade.enemyAttack();
+                let enemyDied = this.facade.attack('primaryAttack');
+                if (enemyDied == true) {
+                    console.log(`%c ${this.facade.enemy.constructor.name}`, 'color:red;', 'died');
+                    console.log(' ');
+                    enemyDied = false;
+                    this.facade.spawnEnemy();
+                }
+                let playerDied = this.facade.enemyAttack();
+                if (playerDied == true) {
+                    console.log(this.facade.player.constructor.name + ' died');
+                    console.log(' ');
+                    playerDied = false;
+                    this.facade.spawnPlayer();
+                }
             }
             if (this.keyListener.isKeyDown(KeyListener.KEY_2)) {
                 this.pressed2 += 1;
@@ -44,13 +56,27 @@ class Game {
                 this.pressed2 = 0;
             }
             if (this.pressed2 == 1) {
-                this.facade.enemyAttack();
-                this.facade.attack('secondaryAttack');
+                let playerDied = this.facade.enemyAttack();
+                if (playerDied == true) {
+                    console.log(this.facade.player.constructor.name + ' died');
+                    console.log(' ');
+                    playerDied = false;
+                    this.facade.spawnPlayer();
+                }
+                let enemyDied = this.facade.attack('secondaryAttack');
+                if (enemyDied == true) {
+                    console.log(`%c ${this.facade.enemy.constructor.name}`, 'color:red;', 'died');
+                    console.log(' ');
+                    enemyDied = false;
+                    this.facade.spawnEnemy();
+                }
             }
             requestAnimationFrame(this.gameLoop);
         };
         this.keyListener = new KeyListener();
         this.facade = new GameLogicFacade();
+        this.facade.spawnPlayer();
+        this.facade.spawnEnemy();
         this.gameLoop();
     }
 }
@@ -73,8 +99,6 @@ class GameLogicFacade {
         this.playerDied = false;
         this.enemyDied = false;
         this.start = true;
-        this.spawnPlayer();
-        this.spawnEnemy();
     }
     spawnPlayer() {
         this.player = this.possiblePlayers[Math.round(Math.random())];
@@ -96,6 +120,7 @@ class GameLogicFacade {
         console.log(' ');
     }
     attack(attack) {
+        console.clear();
         if (attack == 'primaryAttack') {
             this.context.setAttack(new PrimaryAttack());
         }
@@ -112,18 +137,14 @@ class GameLogicFacade {
         }
         this.enemy.setHp(enemyHp - this.damage);
         let newEnemyHp = enemyHp - this.damage;
+        this.enemyDied = false;
         if (newEnemyHp <= 0) {
             newEnemyHp = 0;
             this.enemyDied = true;
         }
         console.log(`%c ${this.player.constructor.name}` + '%c attacked' + `%c ${this.enemy.constructor.name}` + '%c for' + `%c ${this.damage}` + ' %cdamage (' + enemyHp + '❤️ - ' + this.damage + '⚔️ = ' + newEnemyHp + '❤️)', 'color:green;', 'color:white;', 'color:red;', 'color:white', 'color:green', 'color:white');
         console.log(' ');
-        if (this.enemyDied == true) {
-            console.log(`%c ${this.enemy.constructor.name}`, 'color:red;', 'died');
-            console.log(' ');
-            this.enemyDied = false;
-            this.spawnEnemy();
-        }
+        return this.enemyDied;
     }
     enemyAttack() {
         const maxHp = this.enemy.getMaxHp();
@@ -137,18 +158,14 @@ class GameLogicFacade {
         }
         this.player.setHp(playerHp - this.damage);
         let newPlayerHp = playerHp - this.damage;
+        this.playerDied = false;
         if (newPlayerHp <= 0) {
             newPlayerHp = 0;
             this.playerDied = true;
         }
         console.log(`%c ${this.enemy.constructor.name}` + '%c attacked' + `%c ${this.player.constructor.name}` + '%c for' + `%c ${this.damage}` + '%c damage (' + playerHp + '❤️ - ' + this.damage + '⚔️ = ' + newPlayerHp + '❤️)', 'color:red;', 'color:white;', 'color:green;', 'color:white', 'color:red', 'color:white');
         console.log(' ');
-        if (this.playerDied == true) {
-            console.log(this.player.constructor.name + ' died');
-            console.log(' ');
-            this.playerDied = false;
-            this.spawnPlayer();
-        }
+        return this.playerDied;
     }
 }
 class KeyListener {
