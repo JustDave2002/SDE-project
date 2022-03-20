@@ -24,6 +24,15 @@ class Enemy {
         return this.damage;
     }
 }
+class EnemyFactory {
+    constructor() {
+        this.enemies = [new Zombie(), new Skeleton(), new Spider()];
+    }
+    createEnemy() {
+        this.enemy = this.enemies[Math.round(Math.random() * 2)];
+        return this.enemy;
+    }
+}
 class Game {
     constructor() {
         this.gameLoop = () => {
@@ -94,14 +103,15 @@ class SecondaryAttack {
 class GameLogicFacade {
     constructor() {
         this.context = new Context;
-        this.possiblePlayers = [new Swordsman(), new Bowman()];
-        this.enemies = [new Zombie(), new Skeleton(), new Spider()];
+        this.enemyFactory = new EnemyFactory();
+        this.playerFactory = new PlayerFactory();
         this.playerDied = false;
         this.enemyDied = false;
         this.start = true;
     }
     spawnPlayer() {
-        this.player = this.possiblePlayers[Math.round(Math.random())];
+        this.player = this.playerFactory.createPlayer();
+        console.log(this.player);
         if (this.start === true) {
             console.log("Welcome soldier. You get a new " + this.player.constructor.name);
             console.log(' ');
@@ -114,7 +124,7 @@ class GameLogicFacade {
         }
     }
     spawnEnemy() {
-        this.enemy = this.enemies[Math.floor(Math.random() * 3)];
+        this.enemy = this.enemyFactory.createEnemy();
         this.enemy.setHp(this.enemy.getMaxHp());
         console.log("A new" + `%c ${this.enemy.constructor.name}`, 'color:red;', "spawned");
         console.log(' ');
@@ -243,6 +253,15 @@ KeyListener.KEY_W = 87;
 KeyListener.KEY_X = 88;
 KeyListener.KEY_Y = 89;
 KeyListener.KEY_Z = 90;
+class PlayerFactory {
+    constructor() {
+        this.possiblePlayers = [new Swordsman(), new Bowman()];
+    }
+    createPlayer() {
+        this.player = this.possiblePlayers[Math.round(Math.random() * 1)];
+        return this.player;
+    }
+}
 console.log("Javascript is working!");
 window.addEventListener('load', () => {
     console.log("Handling the Load event");

@@ -3,9 +3,9 @@
 /// <reference path="Attacks/SecondaryAttack.ts"/>
 
 class GameLogicFacade {
-    private enemies: Enemy[];
     public enemy: Enemy;
-    private possiblePlayers: Player[];
+    public enemyFactory: EnemyFactory;
+    public playerFactory: PlayerFactory;
     public player: Player;
     private damage: number;
     private start: boolean;
@@ -17,15 +17,16 @@ class GameLogicFacade {
     public constructor() {
         this.context = new Context;
 
-        this.possiblePlayers = [new Swordsman(), new Bowman()]
-        this.enemies = [new Zombie(), new Skeleton(), new Spider()]
+        this.enemyFactory = new EnemyFactory();
+        this.playerFactory = new PlayerFactory();
         this.playerDied = false;
         this.enemyDied = false;
         this.start = true;
     }
 
     public spawnPlayer(){
-        this.player = this.possiblePlayers[Math.round(Math.random())]
+        this.player = this.playerFactory.createPlayer();
+        console.log(this.player);
         if(this.start === true){
             console.log("Welcome soldier. You get a new " +  this.player.constructor.name);
             console.log(' ');
@@ -38,7 +39,7 @@ class GameLogicFacade {
     }
 
     public spawnEnemy(){
-        this.enemy = this.enemies[Math.floor(Math.random() * 3)]
+        this.enemy = this.enemyFactory.createEnemy();
         this.enemy.setHp(this.enemy.getMaxHp());
         console.log("A new"+ `%c ${this.enemy.constructor.name}`, 'color:red;', "spawned" );
         console.log(' ');

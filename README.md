@@ -12,8 +12,13 @@ Een aantal van onze commits:
 <br>
 
 ## Creational design pattern
-Wij hebben voor creational design 2 verschillende factories gemaakt. Dit zijn de Enemy en Player factory. 
+Wij hebben voor creational design 2 verschillende factories gemaakt. Dit zijn de EnemyFactory en de PlayerFactory. 
 Deze factories zorgen voor het creëren van verschillende soorten enemies en players. 
+
+Hieronder kunt ziet u de EnemyFactory, hierin wordt door middel van een willekeurig getal (tussen de 0 en 2) gekozen welke enemy uit de enemies array gekozen wordt.
+
+![image](https://i.imgur.com/iRwC88C.png)
+
 
 Deze factory heeft een abstract enemy class waar alle functies in staan die het zelfde zijn voor alle enemies.
 
